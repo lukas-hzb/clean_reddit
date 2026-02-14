@@ -1,4 +1,4 @@
-# YouTube Clean Home (Google Style) v3.8
+# CleanYouTube
 
 A Userscript that forces a clean, centered 640px layout on the YouTube home page, similar to the Google homepage style, and cleans up search results.
 
