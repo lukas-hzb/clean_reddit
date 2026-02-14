@@ -1,8 +1,8 @@
 {
-  "name": "clean-youtube",
-  "version": "3.8.0",
-  "description": "YouTube Clean Home (Google Style) Userscript",
+  "name": "clean-reddit",
+  "version": "1.0.0",
+  "description": "Clean Reddit: No feed, no ads, no sidebar. Centered search.",
   "scripts": {},
-  "author": "Gemini",
+  "author": "Lukas Hzb",
   "license": "MIT"
 }
