@@ -109,7 +109,8 @@
 
         /* === GLOBAL: Fix page layout to reclaim sidebar space === */
         /* Reddit uses a CSS grid with a column for the left nav.
-           With the nav hidden, we must also collapse that column. */
+           With the nav hidden, we must also collapse that column.
+           We reset both left AND right margins/padding for symmetry. */
         shreddit-app,
         [class*="grid-container"],
         .grid-container,
@@ -120,18 +121,22 @@
         [class*="layout"] {
             grid-template-columns: 100% !important;
             margin-left: 0 !important;
+            margin-right: 0 !important;
             padding-left: 0 !important;
+            padding-right: 0 !important;
             width: 100% !important;
             max-width: 100% !important;
         }
 
-        /* Force the main content area to start from the left edge */
+        /* Force the main content area to fill the grid symmetrically */
         [slot="main"],
         main,
         #main-content {
             grid-column: 1 / -1 !important;
-            margin-left: 0 !important;
-            padding-left: 0 !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            padding-left: 24px !important;
+            padding-right: 24px !important;
         }
 
         /* Reddit's shreddit-app often has a top-level layout container
@@ -536,12 +541,14 @@
 
     /* --- JS HELPER: Fix content offset caused by hidden sidebar --- */
     function fixContentOffset() {
-        // 1. Reset margin/padding on shreddit-app children
+        // 1. Reset margin/padding on shreddit-app children (both sides)
         const app = document.querySelector('shreddit-app');
         if (app) {
             Array.from(app.children).forEach(child => {
                 if (child.style.marginLeft) child.style.setProperty('margin-left', '0', 'important');
+                if (child.style.marginRight) child.style.setProperty('margin-right', '0', 'important');
                 if (child.style.paddingLeft) child.style.setProperty('padding-left', '0', 'important');
+                if (child.style.paddingRight) child.style.setProperty('padding-right', '0', 'important');
             });
         }
 
@@ -560,7 +567,9 @@
         layoutSelectors.forEach(sel => {
             document.querySelectorAll(sel).forEach(el => {
                 el.style.setProperty('margin-left', '0', 'important');
+                el.style.setProperty('margin-right', '0', 'important');
                 el.style.setProperty('padding-left', '0', 'important');
+                el.style.setProperty('padding-right', '0', 'important');
                 el.style.setProperty('grid-column', '1 / -1', 'important');
                 el.style.setProperty('max-width', '100%', 'important');
 
@@ -572,7 +581,7 @@
             });
         });
 
-        // 3. Scan ALL elements for inline margin-left > 20px (aggressive)
+        // 3. Scan ALL elements for large inline margin/padding (both sides)
         // This is heavy but necessary if selectors fail
         const allElements = document.body.getElementsByTagName('*');
         for (let i = 0; i < allElements.length; i++) {
@@ -582,12 +591,16 @@
 
             const style = el.style;
             if (style.marginLeft && parseInt(style.marginLeft) > 20) {
-                // console.log('CleanReddit: Resetting margin-left on', el);
                 style.setProperty('margin-left', '0', 'important');
             }
+            if (style.marginRight && parseInt(style.marginRight) > 20) {
+                style.setProperty('margin-right', '0', 'important');
+            }
             if (style.paddingLeft && parseInt(style.paddingLeft) > 20) {
-                 // console.log('CleanReddit: Resetting padding-left on', el);
                 style.setProperty('padding-left', '0', 'important');
+            }
+            if (style.paddingRight && parseInt(style.paddingRight) > 20) {
+                style.setProperty('padding-right', '0', 'important');
             }
         }
     }
